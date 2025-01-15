@@ -79,6 +79,9 @@
     <label for="timeZhi">選擇時辰地支：</label>
     <select id="timeZhi"></select>
 
+    <label for="randomTimeGan"><input type="checkbox" id="randomTimeGan">隨機生成時辰</label>
+
+
     <button id="calc" onclick="final()">計算</button>
 
     <p id="final">等待按下計算</p>
@@ -187,13 +190,28 @@
             // Birth day
             x3 = parseInt(birthDaySelect.value, 10) || 0;
 
-            // Time Gan and Zhi
-            x4 = parseInt(timeGanSelect.value, 10) || 0;
-            x5 = parseInt(timeZhiSelect.value, 10) || 0;
+            // Check if "Random Time Gan and Zhi" checkbox is checked
+            const isRandomChecked = document.getElementById('randomTimeGan').checked;
+            if (isRandomChecked) {
+                // 隨機選擇時辰天干
+                const randomTimeGanKey = Object.keys(timeGanDebt)[Math.floor(Math.random() * Object.keys(timeGanDebt).length)];
+                x4 = timeGanDebt[randomTimeGanKey];
+                timeGanSelect.value = randomTimeGanKey;  // 同步更新下拉選單顯示
+
+                // 隨機選擇時辰地支
+                const randomTimeZhiKey = Object.keys(timeZhiDebt)[Math.floor(Math.random() * Object.keys(timeZhiDebt).length)];
+                x5 = timeZhiDebt[randomTimeZhiKey];
+                timeZhiSelect.value = randomTimeZhiKey;  // 同步更新下拉選單顯示
+            } else {
+                // 使用者手動選擇的時辰
+                x4 = parseInt(timeGanSelect.value, 10) || 0;
+                x5 = parseInt(timeZhiSelect.value, 10) || 0;
+            }
 
             const result = x1 + x2 + x3 + x4 + x5;
             document.getElementById('final').textContent = result + '貫';
         }
+
     </script>
     <footer>XIECHEN MEDIA &copy; 2024</footer>
 </body>
