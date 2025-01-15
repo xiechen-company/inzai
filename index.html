@@ -79,8 +79,9 @@
     <label for="timeZhi">選擇時辰地支：</label>
     <select id="timeZhi"></select>
 
-    <label for="randomTimeGan"><input type="checkbox" id="randomTimeGan">隨機生成時辰</label>
-
+    <label for="unknownTimeGan">
+        <input type="checkbox" id="unknownTimeGan">顯示時辰範圍
+    </label>
 
     <button id="calc" onclick="final()">計算</button>
 
@@ -176,42 +177,64 @@
         });
 
         function final() {
-            // Check year
-            const year = parseInt(yearSelect.value, 10);
-            const ganZhiYear = calculateGanZhiYear(year);
-            const yearGuan_Num = yearDebtData[ganZhiYear] || 0;
-            x1 = yearGuan_Num;
+            const utg = document.getElementById('unknownTimeGan');
+            if (utg.checked)
+            {
+                console.log('true');
+                 // Check year
+                const year = parseInt(yearSelect.value, 10);
+                const ganZhiYear = calculateGanZhiYear(year);
+                const yearGuan_Num = yearDebtData[ganZhiYear] || 0;
+                x1 = yearGuan_Num;
 
-            // Calculate TianGan and MonthNum sum
-            const tianGanValue = tianGanYue[tianGanSelect.value] || 0;
-            const monthNumValue = tianGanYue_Num[parseInt(monthNumSelect.value, 10)] || 0;
-            x2 = tianGanValue + monthNumValue;
+                // Calculate TianGan and MonthNum sum
+                const tianGanValue = tianGanYue[tianGanSelect.value] || 0;
+                const monthNumValue = tianGanYue_Num[parseInt(monthNumSelect.value, 10)] || 0;
+                x2 = tianGanValue + monthNumValue;
 
-            // Birth day
-            x3 = parseInt(birthDaySelect.value, 10) || 0;
+                // Birth day
+                x3 = parseInt(birthDaySelect.value, 10) || 0;
+                
+                x4min = 10000;
+                x5min = 1000;
+                x4max = 12000;
+                x5max = 12000;
+                resultMin = x1+x2+x3+x4min+x5min;
+                console.log(x1,x2,x3,x4min,x5min);
+                resultMax = x1+x2+x3+x4max+x5max;
+                console.log(x1,x2,x3,x4max,x5max);
+                // Time Gan and Zhi
+                // x4 = parseInt(timeGanSelect.value, 10) || 0;
+                // x5 = parseInt(timeZhiSelect.value, 10) || 0;
 
-            // Check if "Random Time Gan and Zhi" checkbox is checked
-            const isRandomChecked = document.getElementById('randomTimeGan').checked;
-            if (isRandomChecked) {
-                // 隨機選擇時辰天干
-                const randomTimeGanKey = Object.keys(timeGanDebt)[Math.floor(Math.random() * Object.keys(timeGanDebt).length)];
-                x4 = timeGanDebt[randomTimeGanKey];
-                timeGanSelect.value = randomTimeGanKey;  // 同步更新下拉選單顯示
 
-                // 隨機選擇時辰地支
-                const randomTimeZhiKey = Object.keys(timeZhiDebt)[Math.floor(Math.random() * Object.keys(timeZhiDebt).length)];
-                x5 = timeZhiDebt[randomTimeZhiKey];
-                timeZhiSelect.value = randomTimeZhiKey;  // 同步更新下拉選單顯示
+                document.getElementById('final').textContent = '範圍在' + resultMin + '~'+resultMax +'貫';
+
             } else {
-                // 使用者手動選擇的時辰
+                console.log('false');
+                // Check year
+                const year = parseInt(yearSelect.value, 10);
+                const ganZhiYear = calculateGanZhiYear(year);
+                const yearGuan_Num = yearDebtData[ganZhiYear] || 0;
+                x1 = yearGuan_Num;
+
+                // Calculate TianGan and MonthNum sum
+                const tianGanValue = tianGanYue[tianGanSelect.value] || 0;
+                const monthNumValue = tianGanYue_Num[parseInt(monthNumSelect.value, 10)] || 0;
+                x2 = tianGanValue + monthNumValue;
+
+                // Birth day
+                x3 = parseInt(birthDaySelect.value, 10) || 0;
+
+                // Time Gan and Zhi
                 x4 = parseInt(timeGanSelect.value, 10) || 0;
                 x5 = parseInt(timeZhiSelect.value, 10) || 0;
+
+                const result = x1 + x2 + x3 + x4 + x5;
+                console.log(x1,x2,x3,x4,x5);
+                document.getElementById('final').textContent = result + '貫';
             }
-
-            const result = x1 + x2 + x3 + x4 + x5;
-            document.getElementById('final').textContent = result + '貫';
         }
-
     </script>
     <footer>XIECHEN MEDIA &copy; 2024</footer>
 </body>
